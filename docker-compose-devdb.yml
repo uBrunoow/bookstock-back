@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:16.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bookstock
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker_data/data-persist-postgres:/var/lib/postgresql/data
+    networks:
+      - postgres-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "suporte@aupi.com.br"
+      PGADMIN_DEFAULT_PASSWORD: "*tB9K#@Ovy24"
+    ports:
+      - 8081:80
+    networks:
+      - postgres-network
+
+networks:
+  postgres-network:
+    driver: bridge
