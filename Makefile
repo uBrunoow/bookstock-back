@@ -42,7 +42,7 @@ migrate:
 	poetry run bookstock_backend/manage.py migrate
 
 makemigrations:
-	poetry run bookstock_backend/manage.py makemigrations
+	poetry run bookstock_backend/manage.py makemigrations management
 
 devdb:
 	sudo docker-compose -f docker-compose-devdb.yml up --build -d

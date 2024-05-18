@@ -8,7 +8,7 @@ from django.db import transaction
 class UserReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "name", "email"]
+        fields = ["id", "name", "email", "created_at", "updated_at"]
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -18,7 +18,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "email", "password", "last_name", "first_name"]
+        fields = ["id", "email", "password", "last_name", "first_name", "created_at", "updated_at"]
         extra_kwargs = {
             "password": {"write_only": True},
             "id": {"read_only": True},
@@ -85,6 +85,8 @@ class UserCompleteReadOnlySerializer(serializers.ModelSerializer):
             "id",
             "email",
             "name",
+            "created_at",
+            "updated_at",
         ]
 
 
@@ -115,14 +117,14 @@ class ProfileTokenObtainPairSerializer(TokenObtainPairSerializer):
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
-        fields = ['id', 'user', 'library_name', 'location', 'creation_date', 'capacity']
+        fields = ['id', 'user', 'library_name', 'location', 'creation_date', 'capacity', 'created_at', 'updated_at' ]
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = ['id', 'stock', 'title', 'author', 'rental_price', 'sale_price']
+        fields = ['id', 'stock', 'title', 'author', 'rental_price', 'sale_price', 'created_at', 'updated_at']
 
 class BookTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookTransaction
-        fields = ['id', 'book', 'user', 'stock', 'transaction_type', 'transaction_date', 'transaction_value']
+        fields = ['id', 'book', 'user', 'stock', 'transaction_type', 'transaction_date', 'transaction_value', 'created_at', 'updated_at']

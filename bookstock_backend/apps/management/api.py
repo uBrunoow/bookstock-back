@@ -22,6 +22,8 @@ from .serializers import (
     BookSerializer,
     BookTransactionSerializer
 )
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 # from django_filters.rest_framework import DjangoFilterBackend
 # from rest_framework import filters
 
@@ -35,6 +37,8 @@ class UserViewSet(
 ):
     serializer_class = UserCompleteReadOnlySerializer
     queryset = User.objects.all()
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ["name"]
 
     def get_serializer_class(self):
         return (
@@ -103,6 +107,9 @@ class StockViewSet(viewsets.ModelViewSet):
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ["title"]
+
 
 class BookTransactionViewSet(viewsets.ModelViewSet):
     queryset = BookTransaction.objects.all()

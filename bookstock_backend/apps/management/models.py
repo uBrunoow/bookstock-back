@@ -46,6 +46,13 @@ class User(AbstractCUser):
     name = models.CharField(
         max_length=100, help_text="Nome do usuário", verbose_name="Nome"
     )
+    created_at = models.DateTimeField(
+        auto_now_add=True, editable=False, null=True, blank=True
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, editable=False, null=True, blank=True
+    )
+
 
     class Meta(AbstractCUser.Meta):
         swappable = "AUTH_USER_MODEL"
@@ -56,8 +63,7 @@ class User(AbstractCUser):
     def __str__(self):
         return self.email + " | " + self.first_name + " " + self.last_name
     
-class Stock(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Stock(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     library_name = models.CharField(max_length=200)
     location = models.CharField(max_length=200)
@@ -67,16 +73,14 @@ class Stock(models.Model):
     def __str__(self):
         return f'Stock {self.id} of user {self.user.name}'
 
-class Book(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Book(BaseModel):
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
-    rental_price = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    sale_price = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    rental_price = models.IntegerField(default=0)
+    sale_price = models.IntegerField(default=0)
 
-class BookTransaction(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class BookTransaction(BaseModel):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
@@ -86,8 +90,8 @@ class BookTransaction(models.Model):
         default=TransactionType.RENT,
     )
     transaction_date = models.DateField(auto_now_add=True)
-    transaction_value = models.DecimalField(max_digits=5, decimal_places=2)
-
+    transaction_value = models.IntegerField()
+    
     def __str__(self):
         return f'Transaction {self.id} of book {self.book.title} by user {self.user.name} at library {self.library.library_name}'
 
